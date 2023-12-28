@@ -1,0 +1,40 @@
+# Importing the necessary libraries
+pip install googletrans
+from googletrans import Translator
+import pyttsx3
+
+# Function to translate the given text into multiple languages
+def translate_text(text, source_language, target_languages):
+    # Initializing the translator
+    translator = Translator()
+
+    # Translating the text into each target language
+    translations = {}
+    for target_language in target_languages:
+        translation = translator.translate(text, src=source_language, dest=target_language)
+        translations[target_language] = translation.text
+
+    return translations
+
+# Function to speak the translated text
+def speak_text(text):
+    # Initializing the text-to-speech engine
+    engine = pyttsx3.init()
+
+    # Setting the voice properties
+    voices = engine.getProperty('voices')
+    engine.setProperty('voice', voices[0].id)  # Change the index to select a different voice
+
+    # Speaking the text
+    engine.say(text)
+    engine.runAndWait()
+
+# Example usage
+source_text = "Hello, how are you?"
+source_language = "en"
+target_languages = ["fr", "es", "de"]
+
+translations = translate_text(source_text, source_language, target_languages)
+for target_language, translation in translations.items():
+    print(f"Translation to {target_language}: {translation}")
+    speak_text(translation)
